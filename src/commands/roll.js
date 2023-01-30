@@ -13,7 +13,6 @@ function diceRoll(dice_query){
             for (let j=0; j<parsed_dice.dice_multiplier; j++){
                 let roll_result = Math.floor(Math.random() * parsed_dice.dice_type) + 1;
                 output = output + roll_result
-                console.log(roll_result)
             }
         }
         else{output = output + Number(dice);}
@@ -33,7 +32,6 @@ function parseDice(dice){
     dice_type = split_dice[1];
 
     response = {"dice_multiplier": Number(dice_multiplier), "dice_type": Number(dice_type)};
-    console.log(response)
     return response
 }
 
