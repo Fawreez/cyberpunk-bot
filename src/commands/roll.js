@@ -7,7 +7,8 @@ const { SlashCommandBuilder } = require('discord.js');
  */
 function diceRoll(dice_query) {
     // Set output to 0
-    let output = 0;
+    let roll_summary = "";
+    let roll_result = 0;
 
     // Lower all cases
     dice_query.toLowerCase();
@@ -19,20 +20,42 @@ function diceRoll(dice_query) {
         let dice = split_dice_query[i];
 
         // If dice query doesn't involve dice, add to output. Else, roll the dice
-        if (dice.includes('d')) {
-            let parsed_dice = parseDice(dice)
-            
-            // Roll a dice multiple times based on dice multiplier
-            for (let j = 0; j < parsed_dice.dice_multiplier; j++) {
-                let roll_result = Math.floor(Math.random() * parsed_dice.dice_type) + 1;
-                output = output + roll_result
-            }
+        if (!dice.includes('d')) {
+            roll_result = roll_result + Number(dice);
+            roll_summary = roll_summary + dice
+            continue;
         }
-        else { output = output + Number(dice); }
 
+        let parsed_dice = parseDice(dice)
+            
+        // Roll a dice multiple times based on dice multiplier
+        for (let j = 0; j < parsed_dice.dice_multiplier; j++) {
+            let dice_result = Math.floor(Math.random() * parsed_dice.dice_type) + 1;
+            roll_result = roll_result + dice_result
+
+            if (j == 0 ){
+                roll_summary = roll_summary + dice + "(" + dice_result;
+            }
+            else{
+                roll_summary = roll_summary + ", " + dice_result;
+            }
+            if (j == parsed_dice.dice_multiplier - 1){
+                roll_summary = roll_summary + ")";
+            }
+            
+        }
+
+        if (i != split_dice_query.length - 1){
+            roll_summary = roll_summary + " + "
+        }
+    }
+    
+    response = {
+        "roll_summary": roll_summary,
+        "roll_result": roll_result
     }
 
-    return output
+    return response;
 }
 
 /**
@@ -65,8 +88,14 @@ module.exports = {
                 .setDescription('The dice query')
                 .setRequired(true)),
     async execute(interaction) {
-        const dice_query = interaction.options.getString('dice_query')
+        const dice_query = interaction.options.getString('dice_query');
+        const dice_result = diceRoll(dice_query);
 
-        await interaction.reply(String(diceRoll(dice_query)));
+        let result = 
+        `
+        Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
+        `
+
+        await interaction.reply(String(result));
     },
 };
