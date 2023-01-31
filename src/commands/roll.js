@@ -65,10 +65,7 @@ function parseDice(dice) {
     let split_dice = dice.toString().split('d');
 
     // Get the dice multiplier. if 0, override to 1
-    dice_multiplier = split_dice[0];
-    if (dice_multiplier == 0) {
-        dice_multiplier = 1;
-    }
+    dice_multiplier = split_dice[0] || 1;
 
     dice_type = split_dice[1];
 
