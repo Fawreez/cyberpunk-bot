@@ -21,8 +21,8 @@ function diceRoll(dice_query) {
 
         // If dice query doesn't involve dice, add to output. Else, roll the dice
         if (!dice.includes('d')) {
-            roll_result = roll_result + Number(dice);
-            roll_summary = roll_summary + dice
+            roll_result +=  Number(dice);
+            roll_summary +=  dice
             continue;
         }
 
@@ -34,25 +34,23 @@ function diceRoll(dice_query) {
             roll_result = roll_result + dice_result
 
             if (j == 0 ){
-                roll_summary = roll_summary + dice + "(" + dice_result;
+                roll_summary += dice + "(" + dice_result;
             }
             else{
-                roll_summary = roll_summary + ", " + dice_result;
+                roll_summary +=  ", " + dice_result;
             }
             if (j == parsed_dice.dice_multiplier - 1){
-                roll_summary = roll_summary + ")";
+                roll_summary +=  ")";
             }
             
         }
 
         if (i != split_dice_query.length - 1){
-            roll_summary = roll_summary + " + "
+            roll_summary +=  " + "
         }
     }
     
-    response = {
-        "roll_summary": roll_summary,
-        "roll_result": roll_result
+    response = {roll_summary, roll_result
     }
 
     return response;
@@ -74,7 +72,7 @@ function parseDice(dice) {
 
     dice_type = split_dice[1];
 
-    response = { "dice_multiplier": Number(dice_multiplier), "dice_type": Number(dice_type) };
+    response = {dice_multiplier, dice_type};
     return response
 }
 
@@ -88,6 +86,8 @@ module.exports = {
                 .setDescription('The dice query')
                 .setRequired(true)),
     async execute(interaction) {
+        await interaction.deferReply()
+
         const dice_query = interaction.options.getString('dice_query');
         const dice_result = diceRoll(dice_query);
 
@@ -96,6 +96,6 @@ module.exports = {
         Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
         `
 
-        await interaction.reply(String(result));
+        await interaction.editReply(String(result));
     },
 };
