@@ -22,5 +22,6 @@ module.exports = {
                 **BODY:** ${dummySheet.stats.body} **EMP:** ${dummySheet.stats.base_emp}
                 `
             )
+        await interaction.editReply({embeds: [characterSheet]})
 	},
 };
