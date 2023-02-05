@@ -25,275 +25,283 @@
   "skill": {
     "awareness": {
       "lip_reading": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "conceal_reveal_object": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "perception": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "tracking": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "concentration": {
-        "stat": "WILL",
+        "stat": "will",
         "rank": 0
       }
     },
     "education": {
       "education": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "local_expert": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "accounting": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "animal_handling": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "bureaucracy": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "business": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "composition": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "criminology": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "cryptography": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "deduction": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "gamble": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "language": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "library_search": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "science": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "tactics": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       },
       "wilderness_survival": {
-        "stat": "INT",
+        "stat": "int",
         "rank": 0
       }
     },
     "control": {
       "drive_land_vehicle": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       },
       "pilot_air_vehicle": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       },
       "pilot_sea_vehicle": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       },
       "riding": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       }
     },
     "ranged weapon": {
       "archery": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       },
       "autofire": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       },
       "handgun": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       },
-      "heavy_weapon": {
-        "stat": "REF",
+      "heavy_weapons": {
+        "stat": "ref",
         "rank": 0
       },
       "shoulder_arms": {
-        "stat": "REF",
+        "stat": "ref",
         "rank": 0
       }
     },
     "body": {
       "athletics": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       },
       "stealth": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       },
       "contortionist": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       },
       "dance": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       },
       "endurance": {
-        "stat": "WILL",
+        "stat": "will",
         "rank": 0
       },
       "resist_torture_and_drugs": {
-        "stat": "WILL",
+        "stat": "will",
         "rank": 0
       }
     },
     "fighting": {
       "brawling": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       },
       "evasion": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       },
       "melee_weapon": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       },
       "martial_arts": {
-        "stat": "DEX",
+        "stat": "dex",
         "rank": 0
       }
     },
     "technique": {
       "basic_tech": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
-      "cyber_tech": {
-        "stat": "TECH",
+      "cybertech": {
+        "stat": "tech",
         "rank": 0
       },
       "first_aid": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "air_vehicle_tech": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "demolitions": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "electronic_and_security_tech": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "forgery": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "land_vehicle_tech": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "paint_draw_sculpt": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "paramedic": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "photography_and_film": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "pick_lock": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
-      "pickpocket": {
-        "stat": "TECH",
+      "pick_pocket": {
+        "stat": "tech",
         "rank": 0
       },
       "sea_vehicle_tech": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
-      "weapons_tech": {
-        "stat": "TECH",
+      "weaponstech": {
+        "stat": "tech",
         "rank": 0
       }
     },
     "performance": {
       "play_instrument": {
-        "stat": "TECH",
+        "stat": "tech",
         "rank": 0
       },
       "acting": {
-        "stat": "COOL",
+        "stat": "cool",
         "rank": 0
       }
     },
     "social": {
       "bribery": {
-        "stat": "COOL",
+        "stat": "cool",
+        "rank": 0
+      },
+      "conversation": {
+        "stat": "current_emp",
+        "rank": 0
+      },
+      "human_perception": {
+        "stat": "current_emp",
         "rank": 0
       },
       "interrogation": {
-        "stat": "COOL",
+        "stat": "cool",
         "rank": 0
       },
       "persuasion": {
-        "stat": "COOL",
+        "stat": "cool",
         "rank": 0
       },
       "personal_grooming": {
-        "stat": "COOL",
+        "stat": "cool",
         "rank": 0
       },
       "streetwise": {
-        "stat": "COOL",
+        "stat": "cool",
         "rank": 0
       },
       "trading": {
-        "stat": "COOL",
+        "stat": "cool",
         "rank": 0
       },
       "wardrobe_and_style": {
-        "stat": "COOL",
+        "stat": "cool",
         "rank": 0
       }
     }
