@@ -1,0 +1,311 @@
+{
+  "name": "string",
+  "role": "string",
+  "role_ability": "string",
+  "current_hp": 0,
+  "base_hp": 0,
+  "base_humanity": 0,
+  "current_humanity": 0,
+  "current_head_sp": 0,
+  "base_head_sp": 0,
+  "current_body_sp": 0,
+  "base_body_sp": 0,
+  "stats": {
+    "int": 0,
+    "ref": 0,
+    "dex": 0,
+    "tech": 0,
+    "cool": 0,
+    "will": 0,
+    "base_luck": 0,
+    "current_luck": 0,
+    "move": 0,
+    "body": 0,
+    "base_emp": 0,
+    "current_emp": 0
+  },
+  "skill": {
+    "awareness": {
+      "lip_reading": {
+        "stat": "int",
+        "rank": 0
+      },
+      "conceal_reveal_object": {
+        "stat": "int",
+        "rank": 0
+      },
+      "perception": {
+        "stat": "int",
+        "rank": 0
+      },
+      "tracking": {
+        "stat": "int",
+        "rank": 0
+      },
+      "concentration": {
+        "stat": "will",
+        "rank": 0
+      }
+    },
+    "education": {
+      "education": {
+        "stat": "int",
+        "rank": 0
+      },
+      "local_expert": {
+        "stat": "int",
+        "rank": 0
+      },
+      "accounting": {
+        "stat": "int",
+        "rank": 0
+      },
+      "animal_handling": {
+        "stat": "int",
+        "rank": 0
+      },
+      "bureaucracy": {
+        "stat": "int",
+        "rank": 0
+      },
+      "business": {
+        "stat": "int",
+        "rank": 0
+      },
+      "composition": {
+        "stat": "int",
+        "rank": 0
+      },
+      "criminology": {
+        "stat": "int",
+        "rank": 0
+      },
+      "cryptography": {
+        "stat": "int",
+        "rank": 0
+      },
+      "deduction": {
+        "stat": "int",
+        "rank": 0
+      },
+      "gamble": {
+        "stat": "int",
+        "rank": 0
+      },
+      "language": {
+        "stat": "int",
+        "rank": 0
+      },
+      "library_search": {
+        "stat": "int",
+        "rank": 0
+      },
+      "science": {
+        "stat": "int",
+        "rank": 0
+      },
+      "tactics": {
+        "stat": "int",
+        "rank": 0
+      },
+      "wilderness_survival": {
+        "stat": "int",
+        "rank": 0
+      }
+    },
+    "control": {
+      "drive_land_vehicle": {
+        "stat": "ref",
+        "rank": 0
+      },
+      "pilot_air_vehicle": {
+        "stat": "ref",
+        "rank": 0
+      },
+      "pilot_sea_vehicle": {
+        "stat": "ref",
+        "rank": 0
+      },
+      "riding": {
+        "stat": "ref",
+        "rank": 0
+      }
+    },
+    "ranged weapon": {
+      "archery": {
+        "stat": "ref",
+        "rank": 0
+      },
+      "autofire": {
+        "stat": "ref",
+        "rank": 0
+      },
+      "handgun": {
+        "stat": "ref",
+        "rank": 0
+      },
+      "heavy_weapons": {
+        "stat": "ref",
+        "rank": 0
+      },
+      "shoulder_arms": {
+        "stat": "ref",
+        "rank": 0
+      }
+    },
+    "body": {
+      "athletics": {
+        "stat": "dex",
+        "rank": 0
+      },
+      "stealth": {
+        "stat": "dex",
+        "rank": 0
+      },
+      "contortionist": {
+        "stat": "dex",
+        "rank": 0
+      },
+      "dance": {
+        "stat": "dex",
+        "rank": 0
+      },
+      "endurance": {
+        "stat": "will",
+        "rank": 0
+      },
+      "resist_torture_and_drugs": {
+        "stat": "will",
+        "rank": 0
+      }
+    },
+    "fighting": {
+      "brawling": {
+        "stat": "dex",
+        "rank": 0
+      },
+      "evasion": {
+        "stat": "dex",
+        "rank": 0
+      },
+      "melee_weapon": {
+        "stat": "dex",
+        "rank": 0
+      },
+      "martial_arts": {
+        "stat": "dex",
+        "rank": 0
+      }
+    },
+    "technique": {
+      "basic_tech": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "cybertech": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "first_aid": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "air_vehicle_tech": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "demolitions": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "electronic_and_security_tech": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "forgery": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "land_vehicle_tech": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "paint_draw_sculpt": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "paramedic": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "photography_and_film": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "pick_lock": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "pick_pocket": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "sea_vehicle_tech": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "weaponstech": {
+        "stat": "tech",
+        "rank": 0
+      }
+    },
+    "performance": {
+      "play_instrument": {
+        "stat": "tech",
+        "rank": 0
+      },
+      "acting": {
+        "stat": "cool",
+        "rank": 0
+      }
+    },
+    "social": {
+      "bribery": {
+        "stat": "cool",
+        "rank": 0
+      },
+      "conversation": {
+        "stat": "current_emp",
+        "rank": 0
+      },
+      "human_perception": {
+        "stat": "current_emp",
+        "rank": 0
+      },
+      "interrogation": {
+        "stat": "cool",
+        "rank": 0
+      },
+      "persuasion": {
+        "stat": "cool",
+        "rank": 0
+      },
+      "personal_grooming": {
+        "stat": "cool",
+        "rank": 0
+      },
+      "streetwise": {
+        "stat": "cool",
+        "rank": 0
+      },
+      "trading": {
+        "stat": "cool",
+        "rank": 0
+      },
+      "wardrobe_and_style": {
+        "stat": "cool",
+        "rank": 0
+      }
+    }
+  }
+}
