@@ -6,8 +6,10 @@
   "base_hp": 0,
   "base_humanity": 0,
   "current_humanity": 0,
-  "head_sp": 0,
-  "body_sp": 0,
+  "current_head_sp": 0,
+  "base_head_sp": 0,
+  "current_body_sp": 0,
+  "base_body_sp": 0,
   "stats": {
     "int": 0,
     "ref": 0,
