@@ -1,3 +1,4 @@
+const prefix = require('./wrappers/prefix')
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
@@ -13,7 +14,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds,
 									  GatewayIntentBits.GuildMessages,
 									  GatewayIntentBits.MessageContent] });
 
-const prefixes = new Keyv('postgresql://postgres:admin@localhost:5432/postgres', { table: 'prefixes' });
+const prefixes = new Keyv('postgresql://postgres:admin123@localhost:5432/postgres', { table: 'prefixes' });
 prefixes.on('error', err => console.error('Keyv connection error:', err));
 
 client.commands = new Collection();
@@ -82,16 +83,13 @@ client.on(Events.MessageCreate, async message => {
 	// get the first space-delimited argument after the prefix as the command
 	const command = args.shift().toLowerCase();
 
-
-	// TODO move prefix commands to another file
-	if (command === 'prefix') {
-		// if there's at least one argument, set the prefix
-		if (args.length) {
-			await prefixes.set(message.guild.id, args[0]);
-			return message.channel.send(`Successfully set prefix to \`${args[0]}\``);
-		}
-
-		return message.channel.send(`Prefix is \`${await prefixes.get(message.guild.id) || globalPrefix}\``);
+	// Switch to handle all the different commands
+	switch (command){
+		case "prefix":
+			prefix.updatePrefix(message, args);
+			break;
+		default:
+			message.channel.send(`Command ${command} not found`)
 	}
 });
 
