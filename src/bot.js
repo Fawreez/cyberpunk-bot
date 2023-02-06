@@ -1,5 +1,7 @@
+// Require the necessary wrapper files
 const prefix = require('./wrappers/prefix')
 const dice = require('./wrappers/roll_wrapper')
+
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
@@ -14,9 +16,6 @@ const globalPrefix = "??"
 const client = new Client({ intents: [GatewayIntentBits.Guilds,
 									  GatewayIntentBits.GuildMessages,
 									  GatewayIntentBits.MessageContent] });
-
-const prefixes = new Keyv('postgresql://postgres:admin123@localhost:5432/postgres', { table: 'prefixes' });
-prefixes.on('error', err => console.error('Keyv connection error:', err));
 
 client.commands = new Collection();
 
@@ -87,8 +86,9 @@ client.on(Events.MessageCreate, async message => {
 	// Switch to handle all the different commands
 	switch (command){
 		case "prefix":
-			prefix.updatePrefix(message, args);
-			break;
+			response = await prefix.updatePrefix(message.guild.id, args);
+			return message.channel.send(response)
+		case "r":
 		case "roll":
 			args = args.join("")
 			dice_result = dice.diceRoll(args);
@@ -96,6 +96,7 @@ client.on(Events.MessageCreate, async message => {
 			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
 			`
 			return message.channel.send(result)
+
 		default:
 			return message.channel.send(`Command ${command} not found`)
 	}
