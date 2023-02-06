@@ -7,13 +7,13 @@ prefixes.on('error', err => console.error('Keyv connection error:', err));
 const globalPrefix = process.env.GLOBAL_PREFIX
 
 
-module.exports.updatePrefix = async function (message, args){
+module.exports.updatePrefix = async function (guildId, args){
     
 		if (args.length) {
-			await prefixes.set(message.guild.id, args[0]);
-			return message.channel.send(`Successfully set prefix to \`${args[0]}\``);
+			await prefixes.set(guildId, args[0]);
+			return `Successfully set prefix to \`${args[0]}\``;
 		}
 
-		return message.channel.send(`Prefix is \`${await prefixes.get(message.guild.id) || globalPrefix}\``);
+		return `Prefix is \`${await prefixes.get(guildId) || globalPrefix}\``;
     
 }

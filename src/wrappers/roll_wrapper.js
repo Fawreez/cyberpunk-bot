@@ -21,6 +21,12 @@ function diceRoll(dice_query) {
         if (!dice.includes('d')) {
             roll_result +=  Number(dice);
             roll_summary +=  dice
+
+
+            if (i != split_dice_query.length - 1){
+                roll_summary +=  " + "
+            }
+
             continue;
         }
 
@@ -71,3 +77,5 @@ function parseDice(dice) {
     response = {dice_multiplier, dice_type};
     return response
 }
+
+module.exports.diceRoll = diceRoll

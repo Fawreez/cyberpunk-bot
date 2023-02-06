@@ -1,4 +1,7 @@
+// Require the necessary wrapper files
 const prefix = require('./wrappers/prefix')
+const dice = require('./wrappers/roll_wrapper')
+
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
@@ -13,9 +16,6 @@ const globalPrefix = "??"
 const client = new Client({ intents: [GatewayIntentBits.Guilds,
 									  GatewayIntentBits.GuildMessages,
 									  GatewayIntentBits.MessageContent] });
-
-const prefixes = new Keyv('postgresql://postgres:admin123@localhost:5432/postgres', { table: 'prefixes' });
-prefixes.on('error', err => console.error('Keyv connection error:', err));
 
 client.commands = new Collection();
 
@@ -77,7 +77,7 @@ client.on(Events.MessageCreate, async message => {
 	else{
 		// Handle message in DMs
 		const slice = message.content.startsWith(globalPrefix) ? globalPrefix.length : 0;
-		args = message.content.slice(slice).split(/\s+/);
+		args = message.content.slice(slice);
 	}
 
 	// get the first space-delimited argument after the prefix as the command
@@ -86,10 +86,19 @@ client.on(Events.MessageCreate, async message => {
 	// Switch to handle all the different commands
 	switch (command){
 		case "prefix":
-			prefix.updatePrefix(message, args);
-			break;
+			response = await prefix.updatePrefix(message.guild.id, args);
+			return message.channel.send(response)
+		case "r":
+		case "roll":
+			args = args.join("")
+			dice_result = dice.diceRoll(args);
+			result = `
+			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
+			`
+			return message.channel.send(result)
+
 		default:
-			message.channel.send(`Command ${command} not found`)
+			return message.channel.send(`Command ${command} not found`)
 	}
 });
 
