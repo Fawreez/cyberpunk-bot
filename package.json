@@ -24,6 +24,7 @@
     "discord-api-types": "^0.37.30",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
-    "keyv": "^4.5.2"
+    "keyv": "^4.5.2",
+    "node-fetch": "^3.3.1"
   }
 }
