@@ -1,13 +1,21 @@
+// Require the necessary wrapper files
+const prefix = require('./wrappers/prefix')
+const dice = require('./wrappers/roll_wrapper')
+
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const Keyv = require('keyv');
 require('dotenv').config()
 
 const token = process.env.DISCORD_TOKEN
+const globalPrefix = "??"
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds,
+									  GatewayIntentBits.GuildMessages,
+									  GatewayIntentBits.MessageContent] });
 
 client.commands = new Collection();
 
@@ -25,6 +33,7 @@ for (const file of commandFiles) {
 	}
 }
 
+// Interaction handler
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
@@ -42,6 +51,57 @@ client.on(Events.InteractionCreate, async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
+
+// Command handler
+client.on(Events.MessageCreate, async message => {
+	if (message.author.bot) return;
+
+	let args;
+	// Handle messages in guild
+	if (message.guild) {
+		let prefix;
+
+		if (message.content.startsWith(globalPrefix)){
+			prefix = globalPrefix;
+		}
+		else{
+			// Check for guild prefix
+			const guildPrefix = await prefixes.get(message.guild.id);
+			if (message.content.startsWith(guildPrefix)) prefix = guildPrefix;
+		}
+
+		// If prefix exist in the message, set up args
+		if (!prefix) return;
+		args = message.content.slice(prefix.length).trim().split(/\s+/);
+	}
+	else{
+		// Handle message in DMs
+		const slice = message.content.startsWith(globalPrefix) ? globalPrefix.length : 0;
+		args = message.content.slice(slice);
+	}
+
+	// get the first space-delimited argument after the prefix as the command
+	const command = args.shift().toLowerCase();
+
+	// Switch to handle all the different commands
+	switch (command){
+		case "prefix":
+			response = await prefix.updatePrefix(message.guild.id, args);
+			return message.channel.send(response)
+		case "r":
+		case "roll":
+			args = args.join("")
+			dice_result = dice.diceRoll(args);
+			result = `
+			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
+			`
+			return message.channel.send(result)
+
+		default:
+			return message.channel.send(`Command ${command} not found`)
+	}
+});
+
 
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
