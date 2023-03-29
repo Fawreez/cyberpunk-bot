@@ -1,11 +1,12 @@
 // Require the necessary wrapper files
 const prefix = require('./wrappers/prefix')
 const dice = require('./wrappers/roll_wrapper')
+const sheet = require('./wrappers/sheet_wrapper')
 
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits, ActivityFlagsBitField } = require('discord.js');
 const Keyv = require('keyv');
 require('dotenv').config()
 
@@ -87,14 +88,23 @@ client.on(Events.MessageCreate, async message => {
 	switch (command){
 		case "prefix":
 			response = await prefix.updatePrefix(message.guild.id, args);
+			
 			return message.channel.send(response)
+
 		case "r":
 		case "roll":
 			args = args.join("")
 			dice_result = dice.diceRoll(args);
-			result = `
-			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
-			`
+			result = `Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}`
+
+			return message.channel.send(result)
+
+		case "import":
+		case "import_sheet":
+			user_id = message.member.id
+			file = message.attachments.first()
+			result = await sheet.importSheetFromJSON(user_id, file)
+
 			return message.channel.send(result)
 
 		default:
