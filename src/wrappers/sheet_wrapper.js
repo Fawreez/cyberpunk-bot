@@ -2,7 +2,15 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 const Keyv = require('keyv');
 require('dotenv').config()
 
-const sheets = new Keyv('postgresql://postgres:admin123@localhost:5432/postgres', { table: 'sheets' });
+const DB_USER = process.env.DB_USER
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_URL = process.env.DB_URL
+const DB_PORT = process.env.DB_PORT
+const DB_NAME = process.env.DB_NAME
+
+const postgres_url = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_URL}:${DB_PORT}/${DB_NAME}`
+
+const sheets = new Keyv(postgres_url, { table: 'sheets' });
 sheets.on('error', err => console.error('Keyv connection error:', err));
 
 async function fetchData(url) {
