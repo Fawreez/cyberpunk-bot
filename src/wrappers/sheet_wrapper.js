@@ -4,11 +4,11 @@ require('dotenv').config()
 
 const DB_USER = process.env.DB_USER
 const DB_PASSWORD = process.env.DB_PASSWORD
-const DB_URL = process.env.DB_URL
+const DB_HOST = process.env.DB_HOST
 const DB_PORT = process.env.DB_PORT
 const DB_NAME = process.env.DB_NAME
 
-const postgres_url = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_URL}:${DB_PORT}/${DB_NAME}`
+const postgres_url = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`
 
 const sheets = new Keyv(postgres_url, { table: 'sheets' });
 sheets.on('error', err => console.error('Keyv connection error:', err));
