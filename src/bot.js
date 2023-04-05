@@ -9,13 +9,18 @@ const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const Keyv = require('keyv');
 require('dotenv').config()
 
+// Keyv
+const prefixes = new Keyv(postgres_url, { table: 'prefixes' });
+
 const token = process.env.DISCORD_TOKEN
-const globalPrefix = "??"
+const globalPrefix = process.env.DISCORD_TOKEN
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds,
-									  GatewayIntentBits.GuildMessages,
-									  GatewayIntentBits.MessageContent] });
+const client = new Client({
+	intents: [GatewayIntentBits.Guilds,
+	GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.MessageContent]
+});
 
 client.commands = new Collection();
 
@@ -59,22 +64,22 @@ client.on(Events.MessageCreate, async message => {
 	let args;
 	// Handle messages in guild
 	if (message.guild) {
-		let prefix;
+		let bot_prefix;
 
-		if (message.content.startsWith(globalPrefix)){
-			prefix = globalPrefix;
+		if (message.content.startsWith(globalPrefix)) {
+			bot_prefix = globalPrefix;
 		}
-		else{
+		else {
 			// Check for guild prefix
 			const guildPrefix = await prefixes.get(message.guild.id);
 			if (message.content.startsWith(guildPrefix)) prefix = guildPrefix;
 		}
 
 		// If prefix exist in the message, set up args
-		if (!prefix) return;
-		args = message.content.slice(prefix.length).trim().split(/\s+/);
+		if (!bot_prefix) return;
+		args = message.content.slice(bot_prefix.length).trim().split(/\s+/);
 	}
-	else{
+	else {
 		// Handle message in DMs
 		const slice = message.content.startsWith(globalPrefix) ? globalPrefix.length : 0;
 		args = message.content.slice(slice);
@@ -84,15 +89,15 @@ client.on(Events.MessageCreate, async message => {
 	const command = args.shift().toLowerCase();
 
 	// Switch to handle all the different commands
-	switch (command){
+	switch (command) {
 		case "prefix":
-			response = await prefix.updatePrefix(message.guild.id, args);
+			let response = await prefix.updatePrefix(message.guild.id, args);
 			return message.channel.send(response)
 		case "r":
 		case "roll":
 			args = args.join("")
-			dice_result = dice.diceRoll(args);
-			result = `
+			let dice_result = dice.diceRoll(args);
+			let result = `
 			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
 			`
 			return message.channel.send(result)
