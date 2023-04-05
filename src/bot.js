@@ -21,7 +21,7 @@ const postgres_url = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_POR
 const prefixes = new Keyv(postgres_url, { table: 'prefixes' });
 
 const token = process.env.DISCORD_TOKEN
-const globalPrefix = process.env.DISCORD_TOKEN
+const globalPrefix = process.env.GLOBAL_PREFIX
 
 // Create a new client instance
 const client = new Client({
