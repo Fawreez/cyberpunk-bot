@@ -10,13 +10,26 @@ const { Client, Collection, Events, GatewayIntentBits, ActivityFlagsBitField } =
 const Keyv = require('keyv');
 require('dotenv').config()
 
+// Keyv
+const DB_USER = process.env.DB_USER
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_HOST = process.env.DB_HOST
+const DB_PORT = process.env.DB_PORT
+const DB_NAME = process.env.DB_NAME
+
+const postgres_url = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`
+
+const prefixes = new Keyv(postgres_url, { table: 'prefixes' });
+
 const token = process.env.DISCORD_TOKEN
-const globalPrefix = "??"
+const globalPrefix = process.env.GLOBAL_PREFIX
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds,
-									  GatewayIntentBits.GuildMessages,
-									  GatewayIntentBits.MessageContent] });
+const client = new Client({
+	intents: [GatewayIntentBits.Guilds,
+	GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.MessageContent]
+});
 
 client.commands = new Collection();
 
@@ -60,22 +73,22 @@ client.on(Events.MessageCreate, async message => {
 	let args;
 	// Handle messages in guild
 	if (message.guild) {
-		let prefix;
+		let bot_prefix;
 
-		if (message.content.startsWith(globalPrefix)){
-			prefix = globalPrefix;
+		if (message.content.startsWith(globalPrefix)) {
+			bot_prefix = globalPrefix;
 		}
-		else{
+		else {
 			// Check for guild prefix
 			const guildPrefix = await prefixes.get(message.guild.id);
 			if (message.content.startsWith(guildPrefix)) prefix = guildPrefix;
 		}
 
 		// If prefix exist in the message, set up args
-		if (!prefix) return;
-		args = message.content.slice(prefix.length).trim().split(/\s+/);
+		if (!bot_prefix) return;
+		args = message.content.slice(bot_prefix.length).trim().split(/\s+/);
 	}
-	else{
+	else {
 		// Handle message in DMs
 		const slice = message.content.startsWith(globalPrefix) ? globalPrefix.length : 0;
 		args = message.content.slice(slice);
@@ -85,18 +98,18 @@ client.on(Events.MessageCreate, async message => {
 	const command = args.shift().toLowerCase();
 
 	// Switch to handle all the different commands
-	switch (command){
+	switch (command) {
 		case "prefix":
-			response = await prefix.updatePrefix(message.guild.id, args);
-			
+			let response = await prefix.updatePrefix(message.guild.id, args);
 			return message.channel.send(response)
 
 		case "r":
 		case "roll":
 			args = args.join("")
-			dice_result = dice.diceRoll(args);
-			result = `Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}`
-
+			let dice_result = dice.diceRoll(args);
+			let result = `
+			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
+			`
 			return message.channel.send(result)
 
 		case "import":
@@ -104,8 +117,6 @@ client.on(Events.MessageCreate, async message => {
 			user_id = message.member.id
 			file = message.attachments.first()
 			result = await sheet.importSheetFromJSON(user_id, file)
-
-			return message.channel.send(result)
 
 		default:
 			return message.channel.send(`Command ${command} not found`)
