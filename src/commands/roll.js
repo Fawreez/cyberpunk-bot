@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-dice = require('../wrappers/roll_wrapper')
+const dice = require('../wrappers/roll_wrapper')
 
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
         await interaction.deferReply()
 
         const dice_query = interaction.options.getString('dice_query');
-        const dice_result = dice.diceRoll(dice_query);
+        const dice_result = dice.diceRoll(dice_query)
 
         let result = 
         `
