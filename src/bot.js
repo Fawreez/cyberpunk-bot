@@ -98,9 +98,10 @@ client.on(Events.MessageCreate, async message => {
 	const command = args.shift().toLowerCase();
 
 	// Switch to handle all the different commands
+	let result = ``;
 	switch (command) {
 		case "prefix":
-			let result = await prefix.updatePrefix(message.guild.id, args);
+			result = await prefix.updatePrefix(message.guild.id, args);
 			return message.channel.send(result)
 
 		case "r":
