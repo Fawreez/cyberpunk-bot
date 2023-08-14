@@ -1,3 +1,6 @@
+//Sheet json for testing
+const theSheet = require('./commands/exampleSheet.json');
+
 // Require the necessary wrapper files
 const prefix = require('./wrappers/prefix')
 const dice = require('./wrappers/roll_wrapper')
@@ -110,9 +113,11 @@ client.on(Events.MessageCreate, async message => {
 			let dice_result = dice.diceRoll(args);
 			result = `
 			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
-			`;
-			return message.channel.send(result);
-
+			`
+			return message.channel.send(result)
+		case "sheet":
+			const characterSheet = sheet.characterSheet(theSheet)
+			return message.channel.send({embeds: [characterSheet]})
 		case "import":
 		case "import_sheet":
 			let user_id = message.member.id;
