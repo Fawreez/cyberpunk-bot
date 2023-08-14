@@ -76,7 +76,12 @@ async function fetchData(url) {
 async function importSheetFromJSON(user_id, attachment) {
 
   // Fetch attached file from discord url
+  if (attachment == null){
+    return `No attachment found`
+  }
+  
   let attachment_url = attachment.url;
+  
   let file = await fetchData(attachment_url);
   if (file == null) {
     return `There was a problem fetching the file`
