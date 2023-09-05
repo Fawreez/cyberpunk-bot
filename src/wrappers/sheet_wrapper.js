@@ -2,6 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders")
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const Keyv = require('keyv');
 const { v4: uuidv4 } = require('uuid');
+const userWrapper = require('../wrappers/user_wrapper');
 require('dotenv').config()
 
 const DB_USER = process.env.DB_USER
@@ -24,96 +25,118 @@ users.on('error', err => console.error('Keyv connection error:', err));
  * @returns {String} Sorted skills to be presented at the Sheet Embed
  */
 function skillSorter(sheet) {
-    let sortedSkill = ""
+		let sortedSkill = ""
 
-    for (const skillCategory in sheet.skill){
-        for(const skills in sheet.skill[skillCategory]){
-            const skillSpecs = sheet.skill[skillCategory][skills]
-            if(skillSpecs.rank > 2){
-                sortedSkill += `${skillSpecs.name} : ${skillSpecs.rank} \n`
-            }
-        }
-    }
-    return sortedSkill
+		for (const skillCategory in sheet.skill){
+				for(const skills in sheet.skill[skillCategory]){
+						const skillSpecs = sheet.skill[skillCategory][skills]
+						if(skillSpecs.rank > 2){
+								sortedSkill += `${skillSpecs.name} : ${skillSpecs.rank} \n`
+						}
+				}
+		}
+		return sortedSkill
 }
 
 /**
  * Process a sheet json to be displayed in an embed
- * @param {JSON} theSheet the JSON that contains the character's statistics
+ * @param {JSON} sheet_data the JSON that contains the character's statistics
  * @returns {sheet} Embed object that will be displayed in discord
  */
-function characterSheet(theSheet) {
-    const skills = skillSorter(theSheet)
-    const characterSheet = new EmbedBuilder()
-            .setColor(0xad0303)
-            .setTitle(theSheet.name)
-            .setDescription(
-                `**Role:** ${theSheet.role}
-                **HP:** ${theSheet.current_hp} / ${theSheet.base_hp}
-                **INTL:** ${theSheet.stats.int} **REFX:** ${theSheet.stats.ref}
-                **DEXT:** ${theSheet.stats.dex} **TECH:** ${theSheet.stats.tech}
-                **COOL:** ${theSheet.stats.cool} **WILL:** ${theSheet.stats.will}
-                **LUCK:** ${theSheet.stats.base_luck} **MOVE:** ${theSheet.stats.move}
-                **BODY:** ${theSheet.stats.body} **EMPT:** ${theSheet.stats.base_emp}
-                `
-            )
-            .addFields({name: "Skills", value: skills})
+function formatCharacterSheet(sheet_data) {
+		const skills = skillSorter(sheet_data)
+		const characterSheet = new EmbedBuilder()
+						.setColor(0xad0303)
+						.setTitle(sheet_data.name)
+						.setDescription(
+								`**Role:** ${sheet_data.role}
+								**HP:** ${sheet_data.current_hp} / ${sheet_data.base_hp}
+								**INTL:** ${sheet_data.stats.int} **REFX:** ${sheet_data.stats.ref}
+								**DEXT:** ${sheet_data.stats.dex} **TECH:** ${sheet_data.stats.tech}
+								**COOL:** ${sheet_data.stats.cool} **WILL:** ${sheet_data.stats.will}
+								**LUCK:** ${sheet_data.stats.base_luck} **MOVE:** ${sheet_data.stats.move}
+								**BODY:** ${sheet_data.stats.body} **EMPT:** ${sheet_data.stats.base_emp}
+								`
+						)
+						.addFields({name: "Skills", value: skills})
 
-    return characterSheet
+		return characterSheet
 }
 
-async function fetchData(url) {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+async function fetchFileData(url) {
+	try {
+		const response = await fetch(url);
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
 }
 
 async function importSheetFromJSON(user_id, attachment) {
 
-  // Fetch attached file from discord url
-  if (attachment == null){
-    return `No attachment found`
-  }
-  
-  let attachment_url = attachment.url;
-  
-  let file = await fetchData(attachment_url);
-  if (file == null) {
-    return `There was a problem fetching the file`
-  }
-  
-  // Generate random sheet_id
-  sheet_id = uuidv4();
+	// Fetch attached file from discord url
+	if (attachment == null){
+		return `No attachment found`
+	}
+	
+	let attachment_url = attachment.url;
+	
+	let file = await fetchFileData(attachment_url);
+	if (file == null) {
+		return `There was a problem fetching the file`
+	}
+	
+	// Generate random sheet_id
+	sheet_id = uuidv4();
 
-  // Check if user already exist in Users table
-  isUserExist = await users.has(user_id)
-  if (!isUserExist) {
+	// Fetch User data from DB
+	user_data = await userWrapper.fetchUser(user_id);
 
-    // Create new user data
-    user_data = {
-      "active_sheet": sheet_id,
-      "all_sheets": [sheet_id]
-    };
-    await users.set(user_id, user_data);
-  }
-  else {
+	// Update User sheet info
+	if (!user_data.active_sheet){
+		user_data.active_sheet = sheet_id;
+		user_data.all_sheets = [sheet_id];
+	}
+	else{
+		user_data.all_sheets.push(sheet_id);
+	}
 
-    // Update existing user data
-    user_data = await users.get(user_id)
-    user_data.all_sheets.push(sheet_id)
-    await users.set(user_id, user_data)
-  }
+	await users.set(user_id, user_data);
 
-  // Store sheet into Sheets table
-  await sheets.set(user_id, file);
-  return `Sheet saved successfully`
+	// Store sheet into Sheets table
+	await sheets.set(sheet_id, file);
+	return `Sheet saved successfully`
+
+}
+
+async function fetchSheetFromDB(sheet_id){
+	const sheet_data = sheets.get(sheet_id);
+
+	return sheet_data;
+}
+
+async function fetchSheet(user_id){
+	const user_data = await userWrapper.fetchUser(user_id);
+	const sheet_id = user_data.active_sheet
+	const sheet_data = await fetchSheetFromDB(sheet_id);
+	
+    let reply = "";
+
+	if(!sheet_data){
+		return new EmbedBuilder()
+        .setColor(0xad0303)
+        .setTitle(`No Character Sheet is found`)
+        .setDescription(`No character sheet was found for this user`)
+	}
+	else{
+		return formatCharacterSheet(sheet_data);
+
+	}
 
 }
 
 module.exports.importSheetFromJSON = importSheetFromJSON
-module.exports.characterSheet = characterSheet 
+module.exports.characterSheet = formatCharacterSheet
+module.exports.fetchSheet = fetchSheet

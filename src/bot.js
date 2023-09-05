@@ -1,5 +1,5 @@
 //Sheet json for testing
-const theSheet = require('./commands/exampleSheet.json');
+const theSheet = require('./commands/daSheet.json');
 
 // Require the necessary wrapper files
 const prefix = require('./wrappers/prefix')
