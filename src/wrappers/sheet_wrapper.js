@@ -121,8 +121,6 @@ async function fetchSheet(user_id){
 	const user_data = await userWrapper.fetchUser(user_id);
 	const sheet_id = user_data.active_sheet
 	const sheet_data = await fetchSheetFromDB(sheet_id);
-	
-    let reply = "";
 
 	if(!sheet_data){
 		return new EmbedBuilder()
