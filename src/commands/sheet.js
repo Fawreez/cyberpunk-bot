@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const theSheet = require('./exampleSheet.json');
 const sheetSorter = require('../wrappers/sheet_wrapper')
-const { SlashCommandBuilder } = require('discord.js');
 const sheet = require('../wrappers/sheet_wrapper')
 
 module.exports = {
