@@ -121,8 +121,6 @@ async function fetchSheet(user_id){
 	const user_data = await userWrapper.fetchUser(user_id);
 	const sheet_id = user_data.active_sheet
 	const sheet_data = await fetchSheetFromDB(sheet_id);
-	
-    let reply = "";
 
 	if(!sheet_data){
 		return new EmbedBuilder()
@@ -137,6 +135,37 @@ async function fetchSheet(user_id){
 
 }
 
+async function fetchAllSheets(user_id){
+	const user_data = await userWrapper.fetchUser(user_id);
+	const all_sheets = user_data.all_sheets;
+	let character_names = "";
+	let result;
+
+	if (all_sheets.length <1){
+		result = new EmbedBuilder()
+					.setColor(0xad0303)
+					.setTitle("You have no characters.");
+
+		return result;
+	}
+	else{
+		for (const sheet_id of all_sheets){
+			sheet_data = await fetchSheetFromDB(sheet_id);
+			let name = sheet_data.name;
+			character_names += `- ${name}\n`
+		}
+	
+		result = new EmbedBuilder()
+					.setColor(0xad0303)
+					.setTitle("Your Characters")
+					.addFields({name: " ", value: character_names});
+	
+		return result;
+	}
+	
+}
+
 module.exports.importSheetFromJSON = importSheetFromJSON
 module.exports.characterSheet = formatCharacterSheet
 module.exports.fetchSheet = fetchSheet
+module.exports.fetchAllSheets = fetchAllSheets

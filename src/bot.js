@@ -118,6 +118,9 @@ client.on(Events.MessageCreate, async message => {
 		case "sheet":
 			const characterSheet = sheet.characterSheet(theSheet)
 			return message.channel.send({embeds: [characterSheet]})
+		case "sheets":
+			const character_list = await sheet.fetchAllSheets(user_id);
+			return message.channel.send({embeds:[character_list]});
 		case "import":
 		case "import_sheet":
 			let user_id = message.member.id;
