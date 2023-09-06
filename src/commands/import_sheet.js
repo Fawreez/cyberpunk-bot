@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const theSheet = require('./daSheet.json');
 const sheet = require('../wrappers/sheet_wrapper');
 
 module.exports = {

@@ -1,6 +1,3 @@
-//Sheet json for testing
-const theSheet = require('./commands/daSheet.json');
-
 // Require the necessary wrapper files
 const prefix = require('./wrappers/prefix')
 const dice = require('./wrappers/roll_wrapper')
@@ -102,6 +99,7 @@ client.on(Events.MessageCreate, async message => {
 
 	// Switch to handle all the different commands
 	let result = ``;
+	let user_id = message.member.id;
 	switch (command) {
 		case "prefix":
 			result = await prefix.updatePrefix(message.guild.id, args);
@@ -116,14 +114,13 @@ client.on(Events.MessageCreate, async message => {
 			`
 			return message.channel.send(result)
 		case "sheet":
-			const characterSheet = sheet.characterSheet(theSheet)
-			return message.channel.send({embeds: [characterSheet]})
+			const characterSheet = await sheet.fetchSheet(user_id);
+			return message.channel.send({embeds: [characterSheet]});
 		case "sheets":
 			const character_list = await sheet.fetchAllSheets(user_id);
 			return message.channel.send({embeds:[character_list]});
 		case "import":
 		case "import_sheet":
-			let user_id = message.member.id;
 			let file = message.attachments.first();
 			result = await sheet.importSheetFromJSON(user_id, file);
 
