@@ -125,9 +125,29 @@ client.on(Events.MessageCreate, async message => {
 			result = await sheet.importSheetFromJSON(user_id, file);
 
 			return message.channel.send(result);
-
+		case "switch_sheet":
+			const characters = await sheet.fetchAllSheets(user_id);
+			message.channel.send({embeds:[characters]});
+			message.channel.send('Which character do you want to switch to?');
+		
+			const filter = m => m.author.id === message.author.id;
+			message.channel.awaitMessages({ filter, max: 1, time: 15000, errors: ['time'] })
+				.then(collected => {
+					const response = collected.first();
+					console.log(`Collected ${response.content}`);
+		
+					// Call a function to switch character sheet based on the index
+					sheet.switchActiveCharacter(response.content, user_id);
+		
+					return message.channel.send("Character switched successfully");
+				})
+				.catch(() => {
+					return message.channel.send("No response after 15 seconds, operation cancelled.");
+				});
+			
+			return true;
 		default:
-			return message.channel.send(`Command ${command} not found`)
+			return message.channel.send(`Command ${command} not found`);
 	}
 });
 
