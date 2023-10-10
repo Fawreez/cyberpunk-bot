@@ -12,8 +12,6 @@ module.exports = {
 
         const characterSheet = await sheet.fetchSheet(user_id)
 
-		console.log(characterSheet);
-
         await interaction.editReply({embeds: [characterSheet]})
 	},
 };

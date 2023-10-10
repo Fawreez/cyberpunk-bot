@@ -167,7 +167,18 @@ async function fetchAllSheets(user_id){
 	
 }
 
+async function switchActiveCharacter(index, user_id){
+	const user_data = await userWrapper.fetchUser(user_id);
+	const all_sheets = user_data.all_sheets
+
+	user_data.active_sheet = all_sheets[index-1];
+
+	await users.set(user_id, user_data);
+
+}
+
 module.exports.importSheetFromJSON = importSheetFromJSON
 module.exports.characterSheet = formatCharacterSheet
 module.exports.fetchSheet = fetchSheet
 module.exports.fetchAllSheets = fetchAllSheets
+module.exports.switchActiveCharacter = switchActiveCharacter
