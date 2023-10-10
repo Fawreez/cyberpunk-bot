@@ -140,6 +140,7 @@ async function fetchAllSheets(user_id){
 	const all_sheets = user_data.all_sheets;
 	let character_names = "";
 	let result;
+	let num = 0;
 
 	if (all_sheets.length <1){
 		result = new EmbedBuilder()
@@ -152,7 +153,8 @@ async function fetchAllSheets(user_id){
 		for (const sheet_id of all_sheets){
 			sheet_data = await fetchSheetFromDB(sheet_id);
 			let name = sheet_data.name;
-			character_names += `- ${name}\n`
+			character_names += `${num}. ${name}\n`
+			num ++;
 		}
 	
 		result = new EmbedBuilder()
