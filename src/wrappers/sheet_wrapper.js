@@ -177,8 +177,38 @@ async function switchActiveCharacter(index, user_id){
 
 }
 
+async function deleteSheet(index, user_id){
+	const user_data = await userWrapper.fetchUser(user_id);
+	const active_sheet = user_data.active_sheet;
+	const all_sheets = user_data.all_sheets;
+
+	// Fetch sheet id to be deleted
+	const deleted_sheet = all_sheets[index-1];
+
+	// Remove deleted sheet from all_sheets
+	const filter = item => item !== deleted_sheet;
+	const updated_all_sheets = all_sheets.filter(filter);
+
+	// Check if deleted sheet is user's active sheet and remove it
+	let updated_active_sheet = "";
+	if (active_sheet != deleted_sheet){
+		update_active_sheet = active_sheet;
+	}
+
+	// Set up user data and update it in db
+	let updated_user_data = user_data;
+	updated_user_data.all_sheets = updated_all_sheets;
+	updated_user_data.active_sheet = updated_active_sheet;
+	await users.set(user_id, updated_user_data);
+
+	// Delete sheet from db
+	sheets.delete(deleted_sheet);
+
+}
+
 module.exports.importSheetFromJSON = importSheetFromJSON
 module.exports.characterSheet = formatCharacterSheet
 module.exports.fetchSheet = fetchSheet
 module.exports.fetchAllSheets = fetchAllSheets
 module.exports.switchActiveCharacter = switchActiveCharacter
+module.exports.deleteSheet = deleteSheet
