@@ -8,10 +8,13 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 
+		// Get user_id
 		const user_id = interaction.user.id;
 
+		// Fetch character sheet
         const characterSheet = await sheet.fetchSheet(user_id)
 
+		// Send character sheet embed to chat
         await interaction.editReply({embeds: [characterSheet]})
 	},
 };

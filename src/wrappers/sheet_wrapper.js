@@ -41,7 +41,7 @@ function skillSorter(sheet) {
 /**
  * Process a sheet json to be displayed in an embed
  * @param {JSON} sheet_data the JSON that contains the character's statistics
- * @returns {sheet} Embed object that will be displayed in discord
+ * @returns {EmbedBuilder} Embed object that will be displayed in Discord
  */
 function formatCharacterSheet(sheet_data) {
 		const skills = skillSorter(sheet_data)
@@ -63,6 +63,11 @@ function formatCharacterSheet(sheet_data) {
 		return characterSheet
 }
 
+/**
+ * Fetch a JSON object from a file url
+ * @param {String} url Url of the json file being fetched
+ * @returns {Json} JSON object
+ */
 async function fetchFileData(url) {
 	try {
 		const response = await fetch(url);
@@ -70,10 +75,16 @@ async function fetchFileData(url) {
 		return data;
 	} catch (error) {
 		console.error(error);
-		return null;
+		return {};
 	}
 }
 
+/**
+ * Store a JSON file into the database
+ * @param {String} user_id User ID of user to import sheet to
+ * @param {JSON} attachment Discord attachment object
+ * @returns {String}
+ */
 async function importSheetFromJSON(user_id, attachment) {
 
 	// Fetch attached file from discord url
@@ -111,12 +122,22 @@ async function importSheetFromJSON(user_id, attachment) {
 
 }
 
+/**
+ * Fetch a specific character sheet data from the database as a JSON object
+ * @param {String} sheet_id Sheet ID of sheet being fetched
+ * @returns {JSON} Character sheet
+ */
 async function fetchSheetFromDB(sheet_id){
 	const sheet_data = sheets.get(sheet_id);
 
 	return sheet_data;
 }
 
+/**
+ * Fetch character sheet from the database and format it into a Discord embed
+ * @param {String} user_id User ID of user whose active character sheet is being fetched
+ * @returns {EmbedBuilder} Embed object that will be displayed on Discord
+ */
 async function fetchSheet(user_id){
 	const user_data = await userWrapper.fetchUser(user_id);
 	const sheet_id = user_data.active_sheet
@@ -135,6 +156,11 @@ async function fetchSheet(user_id){
 
 }
 
+/**
+ * Fetch a list of character sheets a user has and format it into a Discord embed
+ * @param {String} user_id User ID of user whose character sheets are being fetched
+ * @returns {EmbedBuilder} Embed object that will be displayed on Discord
+ */
 async function fetchAllSheets(user_id){
 	const user_data = await userWrapper.fetchUser(user_id);
 	const all_sheets = user_data.all_sheets;
@@ -143,6 +169,8 @@ async function fetchAllSheets(user_id){
 	let num = 0;
 
 	if (all_sheets.length <1){
+
+		// Create an embed saying there are no characters to be displayed
 		result = new EmbedBuilder()
 					.setColor(0xad0303)
 					.setTitle("You have no characters.");
@@ -150,13 +178,16 @@ async function fetchAllSheets(user_id){
 		return result;
 	}
 	else{
+
+		// Create a String containing a list of character names
 		for (const sheet_id of all_sheets){
 			sheet_data = await fetchSheetFromDB(sheet_id);
 			let name = sheet_data.name;
 			character_names += `${num}. ${name}\n`
 			num ++;
 		}
-	
+		
+		// Create an embed listing all character names
 		result = new EmbedBuilder()
 					.setColor(0xad0303)
 					.setTitle("Your Characters")
@@ -167,6 +198,11 @@ async function fetchAllSheets(user_id){
 	
 }
 
+/**
+ * Switch a user's active character sheet
+ * @param {Int} index Index of the character within the user's character sheet list
+ * @param {String} user_id User ID of user whose active character is being switched
+ */
 async function switchActiveCharacter(index, user_id){
 	const user_data = await userWrapper.fetchUser(user_id);
 	const all_sheets = user_data.all_sheets
@@ -177,6 +213,11 @@ async function switchActiveCharacter(index, user_id){
 
 }
 
+/**
+ * Delete a character sheet from the database
+ * @param {Int} index Index of the character within the user's character sheet list
+ * @param {*} user_id User ID of user whose active character is being deleted
+ */
 async function deleteSheet(index, user_id){
 	const user_data = await userWrapper.fetchUser(user_id);
 	const active_sheet = user_data.active_sheet;
