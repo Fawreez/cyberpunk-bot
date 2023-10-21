@@ -100,6 +100,8 @@ client.on(Events.MessageCreate, async message => {
 	// Switch to handle all the different commands
 	let result = ``;
 	let user_id = message.member.id;
+	let character_list = [];
+	let message_filter = m => m.author.id === message.author.id;
 	switch (command) {
 		case "prefix":
 			result = await prefix.updatePrefix(message.guild.id, args);
@@ -113,18 +115,61 @@ client.on(Events.MessageCreate, async message => {
 			Result: ${dice_result.roll_summary}\nTotal: ${dice_result.roll_result}
 			`
 			return message.channel.send(result)
-		case "sheet":
+		
+			case "sheet":
 			const characterSheet = await sheet.fetchSheet(user_id);
 			return message.channel.send({embeds: [characterSheet]});
+		
+			case "sheets":
+			character_list = await sheet.fetchAllSheets(user_id);
+			return message.channel.send({embeds:[character_list]});
 		case "import":
 		case "import_sheet":
 			let file = message.attachments.first();
 			result = await sheet.importSheetFromJSON(user_id, file);
 
 			return message.channel.send(result);
+		
+		case "switch_sheet":
+			character_list = await sheet.fetchAllSheets(user_id);
+			message.channel.send({embeds:[character_list]});
+			message.channel.send('Which character do you want to switch to?');
+		
+			message.channel.awaitMessages({ message_filter, max: 1, time: 15000, errors: ['time'] })
+				.then(collected => {
+					const response = collected.first();
+					console.log(`Collected ${response.content}`);
+		
+					// Call a function to switch character sheet based on the index
+					sheet.switchActiveCharacter(response.content, user_id);
+		
+					return message.channel.send("Character switched successfully");
+				})
+				.catch(() => {
+					return message.channel.send("No response after 15 seconds, operation cancelled.");
+				});
+			
+		case "delete_sheet":
+			const character_list = await sheet.fetchAllSheets(user_id);
+			message.channel.send({embeds:[character_list]});
+			message.channel.send('Which character do you want to delete?');
+		
+			message.channel.awaitMessages({ message_filter, max: 1, time: 15000, errors: ['time'] })
+				.then(collected => {
+					const response = collected.first();
+					console.log(`Collected ${response.content}`);
+		
+					// Call a function to delete character sheet based on the index
+					sheet.deleteSheet(response.content, user_id);
+		
+					return message.channel.send("Character switched successfully");
+				})
+				.catch(() => {
+					return message.channel.send("No response after 15 seconds, operation cancelled.");
+				});
 
 		default:
-			return message.channel.send(`Command ${command} not found`)
+			return message.channel.send(`Command ${command} not found`);
 	}
 });
 

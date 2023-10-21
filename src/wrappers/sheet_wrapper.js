@@ -135,6 +135,80 @@ async function fetchSheet(user_id){
 
 }
 
+async function fetchAllSheets(user_id){
+	const user_data = await userWrapper.fetchUser(user_id);
+	const all_sheets = user_data.all_sheets;
+	let character_names = "";
+	let result;
+	let num = 0;
+
+	if (all_sheets.length <1){
+		result = new EmbedBuilder()
+					.setColor(0xad0303)
+					.setTitle("You have no characters.");
+
+		return result;
+	}
+	else{
+		for (const sheet_id of all_sheets){
+			sheet_data = await fetchSheetFromDB(sheet_id);
+			let name = sheet_data.name;
+			character_names += `${num}. ${name}\n`
+			num ++;
+		}
+	
+		result = new EmbedBuilder()
+					.setColor(0xad0303)
+					.setTitle("Your Characters")
+					.addFields({name: " ", value: character_names});
+	
+		return result;
+	}
+	
+}
+
+async function switchActiveCharacter(index, user_id){
+	const user_data = await userWrapper.fetchUser(user_id);
+	const all_sheets = user_data.all_sheets
+
+	user_data.active_sheet = all_sheets[index-1];
+
+	await users.set(user_id, user_data);
+
+}
+
+async function deleteSheet(index, user_id){
+	const user_data = await userWrapper.fetchUser(user_id);
+	const active_sheet = user_data.active_sheet;
+	const all_sheets = user_data.all_sheets;
+
+	// Fetch sheet id to be deleted
+	const deleted_sheet = all_sheets[index-1];
+
+	// Remove deleted sheet from all_sheets
+	const filter = item => item !== deleted_sheet;
+	const updated_all_sheets = all_sheets.filter(filter);
+
+	// Check if deleted sheet is user's active sheet and remove it
+	let updated_active_sheet = "";
+	if (active_sheet != deleted_sheet){
+		update_active_sheet = active_sheet;
+	}
+
+	// Set up user data and update it in db
+	let updated_user_data = user_data;
+	updated_user_data.all_sheets = updated_all_sheets;
+	updated_user_data.active_sheet = updated_active_sheet;
+	await users.set(user_id, updated_user_data);
+
+	// Delete sheet from db
+	sheets.delete(deleted_sheet);
+
+}
+
 module.exports.importSheetFromJSON = importSheetFromJSON
 module.exports.characterSheet = formatCharacterSheet
 module.exports.fetchSheet = fetchSheet
+module.exports.fetchAllSheets = fetchAllSheets
+module.exports.switchActiveCharacter = switchActiveCharacter
+module.exports.deleteSheet = deleteSheet

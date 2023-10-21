@@ -3,15 +3,15 @@ const sheet = require('../wrappers/sheet_wrapper');
 
 module.exports = {
     data: new SlashCommandBuilder()
-		.setName('sheet')
-		.setDescription('Displays your character sheet'),
+		.setName('sheets')
+		.setDescription('Display a list of your characters'),
 	async execute(interaction) {
 		await interaction.deferReply();
 
 		const user_id = interaction.user.id;
 
-        const characterSheet = await sheet.fetchSheet(user_id)
+        const result = await sheet.fetchAllSheets(user_id);
 
-        await interaction.editReply({embeds: [characterSheet]})
+        await interaction.editReply({embeds: [result]})
 	},
 };
