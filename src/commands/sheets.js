@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
 		.setName('sheets')
 		.setDescription('Display a list of your characters'),
+    aliases: ['list', 'character_list'],
 	async execute(interaction) {
 		let user_id;
 		let characterList;

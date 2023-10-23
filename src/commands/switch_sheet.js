@@ -5,10 +5,10 @@ module.exports = {
     data: new SlashCommandBuilder()
 		.setName('switch_sheet')
 		.setDescription('Switch your active character'),
+    aliases: ['ss', 'switch_character'],
 	async execute(interaction) {
         let user_id;
         let result;
-        let character;
 
         if (interaction instanceof CommandInteraction) {
             await interaction.deferReply();

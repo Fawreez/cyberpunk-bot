@@ -46,6 +46,10 @@ for (const file of commandFiles) {
 	} else {
 		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 	}
+
+	if (command.aliases) {
+        command.aliases.forEach(alias => client.commands.set(alias, command));
+    }
 }
 
 // Interaction handler

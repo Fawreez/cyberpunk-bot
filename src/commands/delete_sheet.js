@@ -5,6 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
 		.setName('delete_sheet')
 		.setDescription('Delete a character of your choosing'),
+    aliases: ['ds', 'delete_character'],
 	async execute(interaction) {
         let user_id;
         let result;

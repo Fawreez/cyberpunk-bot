@@ -9,6 +9,7 @@ module.exports = {
             option.setName('sheet_json')
             .setDescription('Character sheet to be imported')
             .setRequired(true)),
+    aliases: ['is', 'import_character'],
     async execute(interaction) {
 		let user_id;
 		let sheet_json;

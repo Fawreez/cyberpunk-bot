@@ -10,6 +10,7 @@ module.exports = {
             option.setName('dice_query')
                 .setDescription('The dice query')
                 .setRequired(true)),
+    aliases: ['r', 'dice'],
     async execute(interaction, args) {
         let dice_query;
         let result;
