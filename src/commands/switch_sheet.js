@@ -8,6 +8,7 @@ module.exports = {
 	async execute(interaction) {
         let user_id;
         let result;
+        let character;
 
         if (interaction instanceof CommandInteraction) {
             await interaction.deferReply();
@@ -37,8 +38,8 @@ module.exports = {
                 }
                 else{
                     // Call a function to delete sheet based on the index
-                    sheet.switchActiveCharacter(index, user_id);
-                    await interaction.followUp("Active character deleted successfully");
+                    character = sheet.switchActiveCharacter(index, user_id);
+                    await interaction.followUp(`Active character switched successfully`);
                 }
 
                 // Stop collecting messages
