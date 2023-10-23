@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, CommandInteraction, Message } = require('discord.js');
 const dice = require('../wrappers/roll_wrapper')
 
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('roll')
