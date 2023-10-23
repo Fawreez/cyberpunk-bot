@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, CommandInteraction, Message } = require('discord.js');
 const sheet = require('../wrappers/sheet_wrapper');
 
 module.exports = {
@@ -10,17 +10,30 @@ module.exports = {
             .setDescription('Character sheet to be imported')
             .setRequired(true)),
     async execute(interaction) {
-        await interaction.deferReply();
-        
-        // Get attached file
-        const sheet_json = interaction.options.getAttachment('sheet_json')
+		let user_id;
+		let sheet_json;
+        let result;
+        if (interaction instanceof CommandInteraction) {
+            await interaction.deferReply();
 
-        // Get user_id
-        const user_id = interaction.user.id;
+            sheet_json = interaction.options.getAttachment('sheet_json');
+            
+            user_id = interaction.user.id;
 
-        // Return result
-        const result = await sheet.importSheetFromJSON(user_id, sheet_json);
+            result = await sheet.importSheetFromJSON(user_id, sheet_json);
 
-        await interaction.editReply(result);
+            await interaction.editReply(result);
+
+        } else if (interaction instanceof Message) {
+            sheet_json = interaction.attachments.first();
+            
+            user_id = interaction.member.id;
+
+            result = await sheet.importSheetFromJSON(user_id, sheet_json);
+
+			return interaction.reply(result);
+
+        }
+
     },
 };

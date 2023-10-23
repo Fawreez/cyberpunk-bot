@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, CommandInteraction, Message } = require('discord.js');
 const sheet = require('../wrappers/sheet_wrapper');
 
 module.exports = {
@@ -6,15 +6,24 @@ module.exports = {
 		.setName('sheet')
 		.setDescription('Displays your character sheet'),
 	async execute(interaction) {
-		await interaction.deferReply();
+		let user_id;
+		let characterSheet;
+        if (interaction instanceof CommandInteraction) {
+            await interaction.deferReply();
+            user_id = interaction.user.id;
 
-		// Get user_id
-		const user_id = interaction.user.id;
+            characterSheet = await sheet.fetchSheet(user_id);
 
-		// Fetch character sheet
-        const characterSheet = await sheet.fetchSheet(user_id)
+            await interaction.editReply({embeds: [characterSheet]});
 
-		// Send character sheet embed to chat
-        await interaction.editReply({embeds: [characterSheet]})
+        } else if (interaction instanceof Message) {
+            user_id = interaction.member.id;
+
+			characterSheet = await sheet.fetchSheet(user_id);
+
+			return interaction.reply({embeds:[characterSheet]});
+
+        }
+
 	},
 };
