@@ -5,7 +5,7 @@
   "main": "src/bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/bot.js"
+    "start": "node src/deploy-command.js && node src/bot.js"
   },
   "engines": {
     "node": "16.x"
